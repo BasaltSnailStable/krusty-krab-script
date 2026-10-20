@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Save the Krusty Krab Script — SpongeBob Mod Menu for Windows</title>
+<meta name="description" content="Save the Krusty Krab Script is a SpongeBob mod menu with aimbot, ESP, wallhack, speed hacks and an unlock-all injector for the Krusty Krab defense game. Free, open source, Windows 10/11." />
+<style>
+  :root {
+    --bg-0: #070a18;
+    --bg-1: #0c1230;
+    --bg-2: #131a3d;
+    --ink: #e8ecff;
+    --ink-dim: #a4adcf;
+    --ink-faint: #6f7aa3;
+    --accent: #7c5cff;
+    --accent-2: #22d3ee;
+    --accent-3: #ffd166;
+    --card: rgba(255, 255, 255, 0.045);
+    --card-brd: rgba(255, 255, 255, 0.09);
+    --radius: 16px;
+    --maxw: 1120px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 600px at 12% -10%, rgba(124, 92, 255, 0.28), transparent 60%),
+      radial-gradient(900px 520px at 88% 4%, rgba(34, 211, 238, 0.16), transparent 62%),
+      radial-gradient(800px 600px at 50% 110%, rgba(255, 209, 102, 0.10), transparent 60%),
+      linear-gradient(170deg, var(--bg-1) 0%, var(--bg-0) 45%, var(--bg-2) 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 22px;
+  }
+
+  /* ---------- NAV ---------- */
+  .nav-shell {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 14px 0;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 11px 16px 11px 20px;
+    border-radius: 18px;
+    background: rgba(13, 18, 44, 0.62);
+    border: 1px solid var(--card-brd);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.42);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: 1.02rem;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    font-size: 15px;
+    background: linear-gradient(140deg, var(--accent), #3b2a9e 70%);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14) inset, 0 6px 18px rgba(124, 92, 255, 0.42);
+  }
+
+  .brand span { background: linear-gradient(92deg, #fff, #b9c2ec); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--ink-dim);
+  }
+
+  .nav-links a {
+    padding: 8px 13px;
+    border-radius: 10px;
+    transition: background 0.18s ease, color 0.18s ease;
+    font-weight: 600;
+  }
+
+  .nav-links a:hover { background: rgba(255, 255, 255, 0.07); color: #fff; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    font-weight: 700;
+    font-size: 0.94rem;
+    border-radius: 12px;
+    padding: 12px 22px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #8b6bff, #4f37c9 60%, #2f2286);
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(105, 74, 255, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(105, 74, 255, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.18) inset; }
+
+  .btn-ghost {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: var(--ink);
+  }
+
+  .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
+
+  .nav .btn { padding: 10px 18px; font-size: 0.88rem; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 74px 0 64px;
+    text-align: center;
+    position: relative;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 16px 7px 12px;
+    border-radius: 999px;
+    font-size: 0.79rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #cfd6ff;
+    background: rgba(124, 92, 255, 0.13);
+    border: 1px solid rgba(124, 92, 255, 0.4);
+    box-shadow: 0 0 26px rgba(124, 92, 255, 0.22);
+  }
+
+  .pill .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2); }
+    50% { box-shadow: 0 0 0 7px rgba(74, 222, 128, 0.02); }
+  }
+
+  h1 {
+    margin: 26px auto 0;
+    max-width: 900px;
+    font-size: clamp(2.1rem, 6vw, 4.05rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    font-weight: 900;
+    background: linear-gradient(100deg, #ffffff 8%, #b7a8ff 42%, #6ee7f9 72%, #ffd98a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero p.lead {
+    max-width: 680px;
+    margin: 22px auto 0;
+    color: var(--ink-dim);
+    font-size: clamp(0.98rem, 2.2vw, 1.1rem);
+  }
+
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 34px;
+  }
+
+  .hero-cta .btn { padding: 15px 30px; font-size: 1rem; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 800px;
+    margin: 46px auto 0;
+  }
+
+  .stat {
+    padding: 16px 12px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 1px solid var(--card-brd);
+    backdrop-filter: blur(8px);
+  }
+
+  .stat b {
+    display: block;
+    font-size: 1.06rem;
+    letter-spacing: -0.01em;
+    background: linear-gradient(92deg, #fff, #a9b6ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .stat small {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.73rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink-faint);
+    font-weight: 700;
+  }
+
+  /* ---------- SECTION HEADINGS ---------- */
+  section { padding: 58px 0; }
+
+  .sec-head { text-align: center; margin-bottom: 42px; }
+
+  .sec-kicker {
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8f9bd6;
+  }
+
+  .sec-head h2 {
+    margin: 12px auto 0;
+    font-size: clamp(1.55rem, 4vw, 2.3rem);
+    letter-spacing: -0.028em;
+    line-height: 1.15;
+    font-weight: 850;
+    max-width: 640px;
+  }
+
+  .sec-head h2 em {
+    font-style: normal;
+    background: linear-gradient(92deg, var(--accent-2), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ---------- FEATURES ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .card {
+    position: relative;
+    padding: 26px 22px 24px;
+    border-radius: var(--radius);
+    background: linear-gradient(170deg, rgba(255, 255, 255, 0.062), rgba(255, 255, 255, 0.022));
+    border: 1px solid var(--card-brd);
+    overflow: hidden;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    opacity: 0.85;
+  }
+
+  .card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent-2), #4ade80); }
+  .card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent-3), #ff8a5c); }
+  .card:nth-child(4)::before { background: linear-gradient(90deg, #4ade80, var(--accent-2)); }
+  .card:nth-child(5)::before { background: linear-gradient(90deg, #ff8a5c, var(--accent-3)); }
+  .card:nth-child(6)::before { background: linear-gradient(90deg, #a78bfa, var(--accent)); }
+
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 22px 46px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(124, 92, 255, 0.22);
+  }
+
+  .card .ico {
+    font-size: 1.6rem;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: rgba(124, 92, 255, 0.14);
+    border: 1px solid rgba(124, 92, 255, 0.26);
+    margin-bottom: 16px;
+  }
+
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 1.03rem;
+    letter-spacing: -0.012em;
+    font-weight: 800;
+  }
+
+  .card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-dim);
+    line-height: 1.62;
+  }
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+    padding-left: 8px;
+  }
+
+  .steps::before {
+    content: "";
+    position: absolute;
+    left: 25px;
+    top: 16px;
+    bottom: 16px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2) 55%, rgba(34, 211, 238, 0));
+    border-radius: 2px;
+  }
+
+  .step {
+    position: relative;
+    display: flex;
+    gap: 22px;
+    padding: 0 0 34px 0;
+  }
+
+  .step:last-child { padding-bottom: 0; }
+
+  .step-num {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    font-size: 1.02rem;
+    color: #fff;
+    background: linear-gradient(150deg, #2a2168, #151a3c);
+    border: 1px solid rgba(124, 92, 255, 0.55);
+    box-shadow: 0 0 0 5px rgba(7, 10, 24, 0.9), 0 0 24px rgba(124, 92, 255, 0.34);
+    z-index: 1;
+  }
+
+  .step-body { padding-top: 8px; }
+
+  .step-body h3 {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+    letter-spacing: -0.012em;
+    font-weight: 800;
+  }
+
+  .step-body p {
+    margin: 0;
+    color: var(--ink-dim);
+    font-size: 0.92rem;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq { max-width: 780px; margin: 0 auto; }
+
+  details {
+    border: 1px solid var(--card-brd);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.035);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  details[open] {
+    border-color: rgba(124, 92, 255, 0.42);
+    background: rgba(124, 92, 255, 0.07);
+  }
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 17px 20px;
+    font-weight: 700;
+    font-size: 0.96rem;
+    letter-spacing: -0.008em;
+    user-select: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  .plus {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #cdd5ff;
+    transition: transform 0.24s ease, background 0.24s ease, color 0.24s ease;
+  }
+
+  details[open] .plus {
+    transform: rotate(45deg);
+    background: rgba(124, 92, 255, 0.32);
+    color: #fff;
+  }
+
+  .faq-a {
+    padding: 0 20px 19px;
+    color: var(--ink-dim);
+    font-size: 0.91rem;
+    line-height: 1.68;
+  }
+
+  /* ---------- CTA BANNER ---------- */
+  .cta-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    padding: 62px 30px;
+    text-align: center;
+    background: linear-gradient(150deg, rgba(124, 92, 255, 0.2), rgba(34, 211, 238, 0.07) 55%, rgba(255, 209, 102, 0.06));
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+  }
+
+  .cta-banner::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -40%;
+    width: 780px;
+    height: 780px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(124, 92, 255, 0.45), rgba(34, 211, 238, 0.14) 42%, transparent 68%);
+    pointer-events: none;
+  }
+
+  .cta-banner > * { position: relative; z-index: 1; }
+
+  .cta-banner h2 {
+    margin: 0 auto;
+    max-width: 640px;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.14;
+    font-weight: 900;
+  }
+
+  .cta-banner p {
+    max-width: 540px;
+    margin: 15px auto 0;
+    color: #c4ccf0;
+    font-size: 0.97rem;
+  }
+
+  .cta-banner .btn { margin-top: 28px; padding: 15px 34px; font-size: 1rem; }
+
+  .cta-note {
+    margin-top: 16px;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 700;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 30px 0 44px;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.28));
+  }
+
+  .foot-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+  }
+
+  .foot-inner a { color: #b9c2ec; font-weight: 700; }
+  .foot-inner a:hover { color: #fff; text-decoration: underline; }
+
+  .foot-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .nav-shell { padding: 10px 0; }
+    .nav { padding: 10px 12px; gap: 10px; }
+    .nav-links { display: none; }
+    .brand { font-size: 0.92rem; }
+    .nav .btn { padding: 9px 14px; font-size: 0.82rem; }
+
+    .hero { padding: 46px 0 40px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+
+    section { padding: 42px 0; }
+
+    .steps::before { left: 21px; }
+    .step { gap: 16px; }
+    .step-num { width: 44px; height: 44px; font-size: 0.92rem; }
+
+    .hero-cta { flex-direction: column; }
+    .hero-cta .btn { width: 100%; }
+
+    .cta-banner { padding: 44px 20px; border-radius: 18px; }
+    .cta-banner .btn { width: 100%; }
+
+    .foot-inner { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================= NAV ================= -->
+  <div class="nav-shell">
+    <div class="wrap">
+      <nav class="nav">
+        <a class="brand" href="#top">
+          <span class="brand-mark" aria-hidden="true">🍔</span>
+          <span>krusty-krab-script</span>
+        </a>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#how">How it works</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <a class="btn btn-primary" href="https://gitscore.cc" rel="noopener">Download</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ================= HERO ================= -->
+  <header class="hero" id="top">
+    <div class="wrap">
+      <span class="pill"><span class="dot" aria-hidden="true"></span>SpongeBob Mod Menu · Windows</span>
+
+      <h1>Save the Krusty Krab Script</h1>
+
+      <p class="lead">
+        The all-in-one mod menu for the Krusty Krab defense game. Flip the odds with aimbot,
+        ESP and wallhack, zip around with speed hacks, and unlock every tower, skin and upgrade
+        with the built-in unlock-all injector — all from one clean Windows overlay.
+      </p>
+
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://gitscore.cc" rel="noopener">⬇ Download for Windows</a>
+        <a class="btn btn-ghost" href="https://gitscore.cc" rel="noopener">★ GitHub Repository</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>148,000+</b><small>Downloads</small></div>
+        <div class="stat"><b>v3.4.1</b><small>Latest version</small></div>
+        <div class="stat"><b>Windows 10 / 11</b><small>Supported OS</small></div>
+        <div class="stat"><b>Free &amp; open source</b><small>No paywalls</small></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= FEATURES ================= -->
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">What's inside</div>
+        <h2>Every tool you need to <em>defend the Krabby Patty</em></h2>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="ico" aria-hidden="true">🎯</div>
+          <h3>Aimbot</h3>
+          <p>Lock onto enemy waves with adjustable FOV, smoothing and target priority. Perfect for holding the fryer line on later rounds.</p>
+        </article>
+
+        <article class="card">
+          <div class="ico" aria-hidden="true">👁️</div>
+          <h3>ESP &amp; Wallhack</h3>
+          <p
